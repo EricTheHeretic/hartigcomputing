@@ -13,15 +13,14 @@
     body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 "IBM Plex Sans", sans-serif; }
     button, a.btn { font:inherit; cursor:pointer; }
     .wrap { max-width:42rem; margin:0 auto; padding:2rem 1.25rem 3rem; }
-    .splash { min-height:calc(100dvh - 5.5rem); display:flex; flex-direction:column; justify-content:space-between; }
+    .splash { min-height:100dvh; display:flex; flex-direction:column; justify-content:space-between; }
     .kicker { font-family:"IBM Plex Mono", monospace; font-size:12px; letter-spacing:.04em; color:var(--muted); }
-    h1 { font-size:clamp(2.4rem, 8vw, 3.6rem); line-height:1.05; letter-spacing:-.03em; margin:.6rem 0; }
-    .lead { font-size:1.2rem; max-width:28rem; }
-    .muted { color:var(--muted); }
-    .top { display:flex; justify-content:flex-start; padding:1.25rem 1.35rem 0; }
-    .lattice { display:grid; grid-template-columns:repeat(4, .9rem); gap:.28rem; width:max-content; }
-    .lattice i { display:block; height:.9rem; border-radius:2px; background:var(--sage-deep); }
-    .lattice i.mark { background:var(--sage); }
+    h1 { font-size:clamp(2.6rem, 8vw, 4rem); line-height:1.02; letter-spacing:-.03em; margin:1.4rem 0 .4rem; }
+    .lead { font-size:1.25rem; max-width:34rem; margin-top:0; }
+    .muted { color:var(--muted); max-width:38rem; }
+    .lattice { display:grid; grid-template-columns:repeat(4, 2.2rem); gap:.65rem; width:max-content; margin-top:1.5rem; }
+    .lattice i { display:block; height:2.2rem; border-radius:4px; background:var(--ink); }
+    .lattice i.mark { background:var(--sage-deep); }
     .btn { display:inline-flex; align-items:center; height:3rem; padding:0 1.1rem; border-radius:6px; border:1px solid var(--ink); background:var(--ink); color:var(--bg); text-decoration:none; }
     .btn.ghost { background:var(--surface); color:var(--ink); border-color:var(--line); }
     .row { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
@@ -32,14 +31,12 @@
   </style>
 </head>
 <body>
-  <header class="top">
-    <div class="lattice" aria-hidden="true"></div>
-  </header>
   <main id="splash" class="wrap splash">
     <div>
-      <h1>Welcome to the age of biomimetic computing.</h1>
-      <p class="lead">Hartig Computing is a wetware company.</p>
-      <p class="muted">The computer is a volume for living cells, supplied through the spaces between them. The plan is taken from the forest floor. Beneath the roots, a mycorrhizal mesh runs through the seams, carries inward what the roots cannot fetch, and lasts only because the trade goes both ways. We do not grow that fungus. We build the same kind of network. The center is fed. A signal is sent only when what went out comes back whole.</p>
+      <div class="lattice" aria-hidden="true"></div>
+      <h1>Hartig Computing</h1>
+      <p class="lead">Welcome to the age of biomimetic computing.</p>
+      <p class="muted">Hartig Computing is a wetware company. The computer is a volume for living cells, supplied through the spaces between them. The plan is taken from the forest floor. Beneath the roots, a mycorrhizal mesh runs through the seams, carries inward what the roots cannot fetch, and lasts only because the trade goes both ways. We do not grow that fungus. We build the same kind of network. The center is fed. A signal is sent only when what went out comes back whole.</p>
       <button class="btn" id="enter" type="button">Enter the bench</button>
     </div>
     <p class="muted">Nothing is for sale.</p>
