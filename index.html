@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hartig Computing</title>
+  <meta name="description" content="A computer whose lattice feeds the core. Nothing is for sale." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" />
+  <style>
+    :root { --bg:#f3efe4; --ink:#1c1915; --muted:#5e574c; --surface:#fffdf8; --line:#d9d1c3; --copper:#8c6239; --pass:#1c5c3a; --pass-bg:#e3f0e6; --fail:#8e1d32; --fail-bg:#f8e4e7; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 "IBM Plex Sans", sans-serif; }
+    button, a.btn { font:inherit; cursor:pointer; }
+    .wrap { max-width:42rem; margin:0 auto; padding:2rem 1.25rem 3rem; }
+    .splash { min-height:100vh; display:flex; flex-direction:column; justify-content:space-between; }
+    .kicker { font-family:"IBM Plex Mono", monospace; font-size:12px; letter-spacing:.04em; color:var(--muted); }
+    h1 { font-size:clamp(2.4rem, 8vw, 3.6rem); line-height:1.05; letter-spacing:-.03em; margin:.6rem 0; }
+    .lead { font-size:1.2rem; max-width:28rem; }
+    .muted { color:var(--muted); }
+    .lattice { display:grid; grid-template-columns:repeat(4, 1.4rem); gap:.45rem; width:max-content; }
+    .lattice i { display:block; height:1.35rem; border-radius:2px; background:var(--ink); }
+    .lattice i.core { background:var(--copper); }
+    .btn { display:inline-flex; align-items:center; height:3rem; padding:0 1.1rem; border-radius:6px; border:1px solid var(--ink); background:var(--ink); color:var(--surface); text-decoration:none; }
+    .btn.ghost { background:var(--surface); color:var(--ink); border-color:var(--line); }
+    .row { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+    .card { border:1px solid var(--line); background:var(--surface); border-radius:8px; padding:1rem; margin-top:1rem; }
+    .ok { border-color:var(--pass); background:var(--pass-bg); color:var(--pass); }
+    .bad { border-color:var(--fail); background:var(--fail-bg); color:var(--fail); }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+  <main id="splash" class="wrap splash">
+    <p class="kicker">hartigcomputing.com</p>
+    <div>
+      <div class="lattice" aria-hidden="true"></div>
+      <h1>Hartig Computing</h1>
+      <p class="lead">A computer whose lattice feeds the core.</p>
+      <p class="muted">Sixteen posts through a cube of gel. A poke is sent only if the push comes back whole. The mushroom is the rule. It is not in the box.</p>
+      <button class="btn" id="enter" type="button">Enter the bench</button>
+    </div>
+    <p class="muted">Nothing is for sale.</p>
+  </main>
+  <main id="bench" class="wrap hidden">
+    <button class="btn ghost" id="back" type="button">Hartig Computing</button>
+    <h2>The bench</h2>
+    <p class="muted">A green light here is a resistor in a story. It is not a neuron, and it is not a sale.</p>
+    <div class="row">
+      <button class="btn" id="fair" type="button">Fair poke</button>
+      <button class="btn ghost" id="nine" type="button">Too much voltage</button>
+      <button class="btn ghost" id="uneven" type="button">Uneven poke</button>
+      <button class="btn ghost" id="proof" type="button">Run the proof</button>
+    </div>
+    <div id="out"></div>
+    <p class="muted">Nothing is for sale. A machine can be offered only after a resistor has been poked on a bench that is not a web page.</p>
+  </main>
+  <script>
+    const lattice = document.querySelector(".lattice");
+    for (let i = 0; i < 16; i++) {
+      const cell = document.createElement("i");
+      const edge = i < 4 || i > 11 || i % 4 === 0 || i % 4 === 3;
+      if (!edge) cell.className = "core";
+      lattice.appendChild(cell);
+    }
+    const splash = document.getElementById("splash");
+    const bench = document.getElementById("bench");
+    const out = document.getElementById("out");
+    document.getElementById("enter").onclick = () => { splash.classList.add("hidden"); bench.classList.remove("hidden"); };
+    document.getElementById("back").onclick = () => { bench.classList.add("hidden"); splash.classList.remove("hidden"); out.innerHTML = ""; };
+
+    function verdict(rails, mode, clock, heads, pulse) {
+      if (rails.pos >= 8.5 || rails.neg <= -8.5) return { ok:false, text:"Refused. Nine volts wears the chip out. The safe setting is seven." };
+      const railsOk = rails.pos >= 6.8 && rails.pos <= 7.2 && rails.neg <= -6.8 && rails.neg >= -7.2 && rails.logic >= 3.2 && rails.logic <= 3.6;
+      if (!railsOk) return { ok:false, text:"Refused. The rails are not at seven volts." };
+      if (mode !== 14) return { ok:false, text:"Refused. The ties do not read 14." };
+      if (clock !== "fpga") return { ok:false, text:"Refused. The clock is still in the laptop." };
+      if (heads < 1) return { ok:false, text:"Refused. No headstage is attached." };
+      const charge = (pulse.naA * pulse.usA + pulse.naB * pulse.usB) * 0.001;
+      if (Math.abs(charge) > 0.05) return { ok:false, text:"Refused. The return is smaller than the push." };
+      if (Math.abs(pulse.naA) < 10 || Math.abs(pulse.naA) > 2550000) return { ok:false, text:"Refused. The poke is outside the chip's window." };
+      return { ok:true, text:"Allowed. The push came back whole. This is a resistor, not tissue." };
+    }
+    const good = { pos:7, neg:-7, logic:3.5 };
+    const fair = { naA:4000, usA:100, naB:-4000, usB:100 };
+    const bad = { naA:4000, usA:100, naB:-2000, usB:100 };
+    function show(result) {
+      out.innerHTML = '<div class="card ' + (result.ok ? "ok" : "bad") + '"><p>' + result.text + '</p></div>';
+    }
+    document.getElementById("fair").onclick = () => show(verdict(good, 14, "fpga", 4, fair));
+    document.getElementById("nine").onclick = () => show(verdict({ pos:9, neg:-9, logic:3.5 }, 14, "fpga", 4, fair));
+    document.getElementById("uneven").onclick = () => show(verdict(good, 14, "fpga", 4, bad));
+    document.getElementById("proof").onclick = () => {
+      const steps = [
+        ["Nothing is on", verdict({pos:0,neg:0,logic:0}, 0, "host", 0, fair), false],
+        ["Nine volts", verdict({pos:9,neg:-9,logic:3.5}, 14, "fpga", 4, fair), false],
+        ["Wrong ties", verdict(good, 0, "fpga", 4, fair), false],
+        ["Clock in the laptop", verdict(good, 14, "host", 4, fair), false],
+        ["Uneven poke", verdict(good, 14, "fpga", 4, bad), false],
+        ["The written poke", verdict(good, 14, "fpga", 4, fair), true]
+      ];
+      const holds = steps.every((s) => s[1].ok === s[2]);
+      out.innerHTML = '<div class="card"><ol>' + steps.map((s) => "<li>" + (s[1].ok ? "Allowed" : "Refused") + ". " + s[0] + "</li>").join("") + "</ol><p>" + (holds ? "The checks hold. Five refusals and one allowance. That is not a neuron." : "The checks do not hold.") + "</p></div>";
+    };
+  </script>
+</body>
+</html>
